@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1120" role="img" aria-labelledby="title desc">
+  <title id="title">ShopLedger architecture and order flow</title>
+  <desc id="desc">Architecture of the ShopLedger browser UI, Express server, routes, library modules, config, JSON data file, and the order placement sequence.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/>
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2563eb"/>
+    </marker>
+    <style>
+      text { font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; fill: #172033; }
+      .title { font-size: 30px; font-weight: 750; }
+      .sub { font-size: 15px; fill: #64748b; }
+      .band { font-size: 13px; font-weight: 700; letter-spacing: 1.5px; fill: #64748b; }
+      .box { fill: #fff; stroke: #cbd5e1; stroke-width: 1.5; rx: 12; }
+      .blue { fill: #eff6ff; stroke: #93c5fd; }
+      .purple { fill: #f5f3ff; stroke: #c4b5fd; }
+      .green { fill: #ecfdf5; stroke: #86efac; }
+      .amber { fill: #fffbeb; stroke: #fcd34d; }
+      .name { font-size: 16px; font-weight: 700; }
+      .detail { font-size: 12px; fill: #526174; }
+      .arrow { fill: none; stroke: #64748b; stroke-width: 2; marker-end: url(#arrow); }
+      .arrow-blue { fill: none; stroke: #2563eb; stroke-width: 2.5; marker-end: url(#arrowBlue); }
+      .step { fill: #fff; stroke: #93c5fd; stroke-width: 1.5; rx: 10; }
+      .stepnum { font-size: 12px; font-weight: 800; fill: #1d4ed8; }
+      .steptext { font-size: 13px; font-weight: 650; }
+      .flowline { fill: none; stroke: #2563eb; stroke-width: 2.5; marker-end: url(#arrowBlue); }
+    </style>
+  </defs>
+
+  <rect width="1500" height="1120" fill="#f8fafc"/>
+  <text x="64" y="58" class="title">ShopLedger | Architecture &amp; order flow</text>
+  <text x="64" y="84" class="sub">Browser UI · Express routes · business logic · JSON file storage</text>
+
+  <text x="64" y="122" class="band">APPLICATION ENTRY</text>
+  <rect x="500" y="102" width="500" height="70" class="box blue"/>
+  <text x="750" y="132" text-anchor="middle" class="name">Browser UI</text>
+  <text x="750" y="154" text-anchor="middle" class="detail">public/index.html · public/js/app.js · public/css/style.css</text>
+
+  <rect x="500" y="199" width="500" height="70" class="box purple"/>
+  <text x="750" y="229" text-anchor="middle" class="name">server.js</text>
+  <text x="750" y="251" text-anchor="middle" class="detail">Express · serves public/ · mounts /api routes · /orders/:id/invoice</text>
+  <path d="M750 172 L750 196" class="arrow"/>
+
+  <text x="64" y="306" class="band">ROUTES — MOUNTED AT /api</text>
+  <rect x="64" y="326" width="330" height="102" class="box"/>
+  <text x="84" y="356" class="name">routes/products.js</text>
+  <text x="84" y="380" class="detail">GET /products · GET /coupons</text>
+  <text x="84" y="402" class="detail">Uses store, inventory, tax, coupons</text>
+
+  <rect x="424" y="326" width="330" height="102" class="box"/>
+  <text x="444" y="356" class="name">routes/orders.js</text>
+  <text x="444" y="380" class="detail">GET /orders · POST /orders · cancel</text>
+  <text x="444" y="402" class="detail">Uses store, inventory, pricing, coupons, orders, ledger</text>
+
+  <rect x="784" y="326" width="300" height="102" class="box"/>
+  <text x="804" y="356" class="name">routes/customers.js</text>
+  <text x="804" y="380" class="detail">GET /customers · POST settlement</text>
+  <text x="804" y="402" class="detail">Uses store, ledger</text>
+
+  <rect x="1114" y="326" width="322" height="102" class="box"/>
+  <text x="1134" y="356" class="name">routes/reports.js</text>
+  <text x="1134" y="380" class="detail">Dashboard · GST · pricing preview · export</text>
+  <text x="1134" y="402" class="detail">Uses config, store, reports, pricing, coupons</text>
+
+  <path d="M750 269 L750 292 L229 292 L229 323" class="arrow"/>
+  <path d="M750 292 L589 292 L589 323" class="arrow"/>
+  <path d="M750 292 L934 292 L934 323" class="arrow"/>
+  <path d="M750 292 L1275 292 L1275 323" class="arrow"/>
+
+  <text x="64" y="468" class="band">LIBRARY MODULES — MODULES LIST THEIR DIRECT INPUTS</text>
+  <rect x="64" y="488" width="330" height="78" class="box green"/>
+  <text x="84" y="517" class="name">lib/pricing.js</text>
+  <text x="84" y="541" class="detail">Totals and line tax · uses tax, coupons</text>
+  <rect x="424" y="488" width="330" height="78" class="box green"/>
+  <text x="444" y="517" class="name">lib/tax.js</text>
+  <text x="444" y="541" class="detail">HSN rates and CGST/SGST split · uses config</text>
+  <rect x="784" y="488" width="300" height="78" class="box green"/>
+  <text x="804" y="517" class="name">lib/coupons.js</text>
+  <text x="804" y="541" class="detail">Coupon lookup and discounts · uses config</text>
+  <rect x="1114" y="488" width="322" height="78" class="box green"/>
+  <text x="1134" y="517" class="name">lib/inventory.js</text>
+  <text x="1134" y="541" class="detail">Stock checks/reserve/release · uses config</text>
+
+  <rect x="64" y="584" width="330" height="78" class="box green"/>
+  <text x="84" y="613" class="name">lib/orders.js</text>
+  <text x="84" y="637" class="detail">Order records/list/cancel · uses dates, inventory, ledger</text>
+  <rect x="424" y="584" width="330" height="78" class="box green"/>
+  <text x="444" y="613" class="name">lib/ledger.js</text>
+  <text x="444" y="637" class="detail">Customer credit and settlements · uses dates</text>
+  <rect x="784" y="584" width="300" height="78" class="box green"/>
+  <text x="804" y="613" class="name">lib/reports.js</text>
+  <text x="804" y="637" class="detail">Dashboard and GST reconciliation · uses inventory, ledger, invoice</text>
+  <rect x="1114" y="584" width="322" height="78" class="box green"/>
+  <text x="1134" y="613" class="name">lib/invoice.js</text>
+  <text x="1134" y="637" class="detail">Printable invoice figures/HTML · uses config</text>
+
+  <rect x="244" y="680" width="380" height="70" class="box green"/>
+  <text x="264" y="710" class="name">lib/dates.js</text>
+  <text x="264" y="733" class="detail">Today, date normalization, fiscal year</text>
+  <rect x="814" y="680" width="380" height="70" class="box green"/>
+  <text x="834" y="710" class="name">lib/store.js</text>
+  <text x="834" y="733" class="detail">Read/write JSON data and append audit entries</text>
+
+  <rect x="64" y="777" width="650" height="76" class="box amber"/>
+  <text x="84" y="808" class="name">config.js</text>
+  <text x="84" y="832" class="detail">Port · shop details · tax slabs · inventory defaults · coupons · used by tax, inventory, coupons, invoice</text>
+  <rect x="786" y="777" width="650" height="76" class="box amber"/>
+  <text x="806" y="808" class="name">data/db.json</text>
+  <text x="806" y="832" class="detail">Products · orders · customers · settlements · audit log</text>
+  <path d="M986 750 L986 774" class="arrow"/>
+
+  <rect x="64" y="879" width="1372" height="201" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1.5" rx="14"/>
+  <text x="88" y="911" class="band" style="fill:#1d4ed8">ORDER PLACEMENT FLOW · POST /api/orders</text>
+  <rect x="88" y="936" width="220" height="92" class="step"/>
+  <text x="108" y="960" class="stepnum">1</text>
+  <text x="108" y="984" class="steptext">Browser UI sends</text>
+  <text x="108" y="1006" class="detail">items, customer, coupon</text>
+  <rect x="344" y="936" width="220" height="92" class="step"/>
+  <text x="364" y="960" class="stepnum">2</text>
+  <text x="364" y="984" class="steptext">routes/orders.js</text>
+  <text x="364" y="1006" class="detail">reads data via store.js</text>
+  <rect x="600" y="936" width="220" height="92" class="step"/>
+  <text x="620" y="960" class="stepnum">3</text>
+  <text x="620" y="984" class="steptext">Check stock + calculate</text>
+  <text x="620" y="1006" class="detail">inventory · pricing · tax · coupons</text>
+  <rect x="856" y="936" width="220" height="92" class="step"/>
+  <text x="876" y="960" class="stepnum">4</text>
+  <text x="876" y="984" class="steptext">Khata check if needed</text>
+  <text x="876" y="1006" class="detail">ledger · then reserve stock</text>
+  <rect x="1112" y="936" width="292" height="92" class="step"/>
+  <text x="1132" y="960" class="stepnum">5</text>
+  <text x="1132" y="984" class="steptext">Add order + audit; save</text>
+  <text x="1132" y="1006" class="detail">orders · store.js → data/db.json → UI</text>
+  <path d="M308 982 L340 982" class="flowline"/>
+  <path d="M564 982 L596 982" class="flowline"/>
+  <path d="M820 982 L852 982" class="flowline"/>
+  <path d="M1076 982 L1108 982" class="flowline"/>
+</svg>
